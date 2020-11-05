@@ -50,6 +50,27 @@ corr = data %>%
 #correlation matrix
 GGally::ggpairs(corr) + theme_bw(base_size = 15)
 ```
+## Model selection using forward AIC
+
+```{r}
+M0 = lm(pct_bf ~ 1, data = data) # Null model
+M1 = lm(pct_bf ~ ., data = data) # FUll model
+step.fwd.aic = step(M0, scope = list(lower = M0, upper = M1), direction = "forward", trace = FALSE) 
+round(summary(step.fwd.aic)$coef,3)
+```
+## Model selection using backward AIC
+```{r}
+step.back.aic = step(M1, direction = "backward", trace = FALSE) 
+round(summary(step.back.aic)$coef,3)
+```
+### Compare the backward and forward AIC methods
+
+```{r}
+sjPlot::tab_model( step.fwd.aic, step.back.aic, show.ci = FALSE, show.aic = TRUE, dv.labels = c("Forward model", "Backward model") )
+```
+
+Since both methods give us same AIC, we can choose either of them. We decided to use forward AIC for variable selection
+
 
 ##Fit a simple linear mode
 
@@ -111,8 +132,8 @@ autoplot(lm1, which = 1:2)
 
 #full linear regression model
 ```{r}
-lm3 = lm(pct_bf ~ density + age + weight + height + neck + chest + abdomen + waist + hip + thigh + knee + ankle + bicep + forearm + wrist, data) 
-summary(lm3)
+lm3 = lm(pct_bf ~ ., data = data) # FUll model
+round(summary(M1)$coef, 3)
 sjPlot::tab_model(lm3, show.ci = FALSE)
 ```
 
