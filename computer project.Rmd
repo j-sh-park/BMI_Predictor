@@ -40,16 +40,10 @@ skimr::skim(data)
 qtlcharts::iplotCorr(data)
 ```
 ```{r}
-#extract the data which is storngly correlated to percentage body fat
-corr = data %>%
-  select(pct_bf,density,weight,chest,abdomen) #select corr > 0.7 or < -0.7
+
 ```
 
 
-```{r}
-#correlation matrix
-GGally::ggpairs(corr) + theme_bw(base_size = 15)
-```
 ## Model selection using forward AIC
 
 ```{r}
@@ -201,12 +195,22 @@ The age vs percentage body fat plot shows a some curvature. There are some depar
 
 The Abdomen vs percentage body fat plot shows a some curvature. There are some departure in the lower quantiles for the first qq plot.
 
+##Check multicolinearity
+```{r}
+#extract the data which is storngly correlated to percentage body fat
+corr = data %>%
+  select(pct_bf,density,age,abdomen) #select corr > 0.7 or < -0.7
+
+#correlation matrix
+GGally::ggpairs(corr) + theme_bw(base_size = 15)
+```
+It seems like there is a strong negative correlation between density and abdomen. We should drop one of them
 
 # Modelling
 
 #final linear regression model
 ```{r}
-lm_final = lm(pct_bf ~ density + abdomen , data = data) # final
+lm_final = lm(pct_bf ~ age + abdomen, data = data) # final
 round(summary(lm_final)$coef, 3)
 sjPlot::tab_model(lm3, show.ci = FALSE)
 ```
