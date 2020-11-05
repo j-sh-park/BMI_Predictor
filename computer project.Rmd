@@ -9,7 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 devtools::install_github("ropenscilabs/gendercodeR")
 #import libraries
-library(gendercodeR)
 library(tidyverse)
 library(janitor)
 library(skimr)
@@ -19,6 +18,7 @@ library(gt)
 library(kableExtra)
 library(GGally)
 library(qtlcharts)
+library(ggfortify) 
 options(knitr.table.format = "html")
 ```
 
@@ -49,6 +49,63 @@ corr = data %>%
 #correlation matrix
 GGally::ggpairs(corr) + theme_bw(base_size = 15)
 ```
+
+##Fit a linear mode
+
+```{r}
+lm1 = lm(pct_bf ~ density, data = data) 
+lm1
+```
+
+```{r}
+par(cex = 2) 
+plot(pct_bf~density, data = data) 
+abline(lm1, lwd = 3, col = "red")
+```
+```{r}
+fitted = 477.2 + (-433.9) * data$density
+resid = data$pct_bf - fitted
+```
+
+
+## Chekcing assumptions
+
+###Check linearity
+```{r}
+#percentage body fat vs density
+p1 = ggplot(data, 
+              aes(x = density , y = pct_bf)) + 
+     geom_point(size = 1) + 
+     theme_classic(base_size = 12) + 
+     labs(x = "density",
+          y = "Percentage body fat") +
+     geom_smooth(method = "lm", se = FALSE) 
+
+p2 = ggplot(data, 
+            aes(x = density, y = resid)) + 
+     geom_point(size = 1) + theme_classic(base_size = 12) + 
+     labs(x = "Density", y = "Residual") + 
+     geom_hline(yintercept = 0) 
+
+grid.arrange(p1, p2 ,nrow =1, ncol = 2)
+```
+### Check independenc
+
+
+
+### Check homoskedasiticy
+
+```{r}
+p2
+```
+### Check normality
+
+```{r}
+autoplot(lm1, which = 1:2)
+```
+
+
+# Modelling
 
 ```{r}
 
