@@ -74,6 +74,7 @@ Since both methods give us same AIC, we can choose either of them. We decided to
 
 ##Fit a simple linear mode
 
+## pcentage body fat vs density
 ```{r}
 lm1 = lm(pct_bf ~ density, data = data) 
 summary(lm1)
@@ -86,8 +87,41 @@ plot(pct_bf~density, data = data)
 abline(lm1, lwd = 3, col = "red")
 ```
 ```{r}
-fitted = 477.2 + (-433.9) * data$density
-resid = data$pct_bf - fitted
+fitted1 = 477.2 + (-433.9) * data$density
+resid1 = data$pct_bf - fitted
+```
+
+## percentage body fat vs age
+```{r}
+lm2 = lm(pct_bf ~ age, data = data) 
+summary(lm2)
+sjPlot::tab_model(lm2, show.ci = FALSE)
+```
+```{r}
+par(cex = 2) 
+plot(pct_bf~age, data = data) 
+abline(lm2, lwd = 3, col = "red")
+```
+```{r}
+fitted2 = 10.35029  +  0.19342 * data$age
+resid2 = data$pct_bf - fitted
+```
+
+## percentage body fat vs abdomen
+```{r}
+lm3 = lm(pct_bf ~ abdomen, data = data) 
+summary(lm3)
+sjPlot::tab_model(lm3, show.ci = FALSE)
+```
+
+```{r}
+par(cex = 2) 
+plot(pct_bf~abdomen, data = data) 
+abline(lm3, lwd = 3, col = "red")
+```
+```{r}
+fitted3 = -42.73413  + 0.66928 * data$abdomen
+resid3 = data$pct_bf - fitted
 ```
 
 
@@ -105,27 +139,67 @@ p1 = ggplot(data,
      geom_smooth(method = "lm", se = FALSE) 
 
 p2 = ggplot(data, 
-            aes(x = density, y = resid)) + 
-     geom_point(size = 1) + theme_classic(base_size = 12) + 
-     labs(x = "Density", y = "Residual") + 
-     geom_hline(yintercept = 0) 
+              aes(x = age , y = pct_bf)) + 
+     geom_point(size = 1) + 
+     theme_classic(base_size = 12) + 
+     labs(x = "Age",
+          y = "Percentage body fat") +
+     geom_smooth(method = "lm", se = FALSE) 
 
-grid.arrange(p1, p2 ,nrow =1, ncol = 2)
+p3 = ggplot(data, 
+              aes(x = abdomen , y = pct_bf)) + 
+     geom_point(size = 1) + 
+     theme_classic(base_size = 12) + 
+     labs(x = "Abdomen",
+          y = "Percentage body fat") +
+     geom_smooth(method = "lm", se = FALSE) 
+
+
+grid.arrange(p1, p2, p3 ,nrow =2, ncol = 2)
 ```
-### Check independenc
 
+All three plots shows strong linearity, though the variance of percentage body fat for people age 60 to 80 is a bit smaller than the people age from 20 -60. The linearity assumption is met.
+### Check independence
 
+All the observations are taken from different people, the data are independent of each other
 
 ### Check homoskedasiticy
 
 ```{r}
-p2
+p4 = ggplot(data, 
+            aes(x = density, y = resid1)) + 
+     geom_point(size = 1) + theme_classic(base_size = 12) + 
+     labs(x = "Density", y = "Residual") + 
+     geom_hline(yintercept = 0) 
+
+p5 = ggplot(data, 
+            aes(x = age, y = resid2)) + 
+     geom_point(size = 1) + theme_classic(base_size = 12) + 
+     labs(x = "Age", y = "Residual") + 
+     geom_hline(yintercept = 0) 
+
+p6 = ggplot(data, 
+            aes(x = abdomen, y = resid3)) + 
+     geom_point(size = 1) + theme_classic(base_size = 12) + 
+     labs(x = "Abdomen", y = "Residual") + 
+     geom_hline(yintercept = 0) 
+
+grid.arrange(p4, p5, p6 ,nrow =2, ncol = 2)
 ```
+The data in all plots seems have equal variance. A few outliers can be ignored. The homoskedasiticy assumption is met.
+
 ### Check normality
 
 ```{r}
 autoplot(lm1, which = 1:2)
+autoplot(lm2, which = 1:2)
+autoplot(lm3, which = 1:2)
 ```
+There are some departure in the higher quantiles for the first qq plot.
+
+The age vs percentage body fat plot shows a some curvature. There are some departure in the lower quantiles for the first qq plot.
+
+The Abdomen vs percentage body fat plot shows a some curvature. There are some departure in the lower quantiles for the first qq plot.
 
 
 # Modelling
