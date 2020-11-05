@@ -35,14 +35,6 @@ There are 250 observations and 16 variables in this data set. Each row represent
 ```{r results='hide'}
 skimr::skim(data)
 ```
-```{r}
-#interactive correlation matrix
-qtlcharts::iplotCorr(data)
-```
-```{r}
-
-```
-
 
 ## Model selection using forward AIC
 
