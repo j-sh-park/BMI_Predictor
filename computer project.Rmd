@@ -19,6 +19,7 @@ library(kableExtra)
 library(GGally)
 library(qtlcharts)
 library(ggfortify) 
+library(sjPlot)
 options(knitr.table.format = "html")
 ```
 
@@ -50,11 +51,12 @@ corr = data %>%
 GGally::ggpairs(corr) + theme_bw(base_size = 15)
 ```
 
-##Fit a linear mode
+##Fit a simple linear mode
 
 ```{r}
 lm1 = lm(pct_bf ~ density, data = data) 
-lm1
+summary(lm1)
+sjPlot::tab_model(lm1, show.ci = FALSE)
 ```
 
 ```{r}
@@ -107,7 +109,22 @@ autoplot(lm1, which = 1:2)
 
 # Modelling
 
+#full linear regression model
 ```{r}
+lm3 = lm(pct_bf ~ density + age + weight + height + neck + chest + abdomen + waist + hip + thigh + knee + ankle + bicep + forearm + wrist, data) 
+summary(lm3)
+sjPlot::tab_model(lm3, show.ci = FALSE)
+```
+
+
+## 10 fold cross validaiton
+```{r}
+set.seed(2020)
+nrow(data)
+```
+
+```{r}
+fold_id = c(1, rep(1:10, each = 25))
 
 ```
 
