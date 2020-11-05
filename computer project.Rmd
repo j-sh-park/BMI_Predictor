@@ -6,9 +6,49 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+devtools::install_github("ropenscilabs/gendercodeR")
+#import libraries
+library(gendercodeR)
+library(tidyverse)
+library(janitor)
+library(skimr)
+library(visdat)
+library(gridExtra)
+library(gt)
+library(kableExtra)
+library(GGally)
+library(qtlcharts)
+options(knitr.table.format = "html")
 ```
 
+
+# Exploratory Data Analysis(EDA)
+```{r results ='hide'}
+data = read.table("bodyfat.txt",header=TRUE) #read the data
+
+glimpse(data)# Quick glimpse of the data
+```
+There are 250 observations and 16 variables in this data set. Each row represents an individual response and each column represents the features
+
+```{r results='hide'}
+skimr::skim(data)
+```
+```{r}
+#interactive correlation matrix
+qtlcharts::iplotCorr(data)
+```
+```{r}
+#extract the data which is storngly correlated to percentage body fat
+corr = data %>%
+  select(pct_bf,density,weight,chest,abdomen) #select corr > 0.7 or < -0.7
+```
+
+
+```{r}
+#correlation matrix
+GGally::ggpairs(corr) + theme_bw(base_size = 15)
+```
 
 ```{r}
 
