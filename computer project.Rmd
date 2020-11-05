@@ -197,29 +197,19 @@ autoplot(lm3, which = 1:2)
 ```
 There are some departure in the higher quantiles for the first qq plot.
 
-The age vs percentage body fat plot shows a some curvature. There are some departure in the lower quantiles for the first qq plot.
+The age vs percentage body fat plot shows a some curvature. There are some departure in the lower quantiles for the first qq plot. This violates the normal distirbution assumption??
 
 The Abdomen vs percentage body fat plot shows a some curvature. There are some departure in the lower quantiles for the first qq plot.
 
 
 # Modelling
 
-#full linear regression model
+#final linear regression model
 ```{r}
-lm3 = lm(pct_bf ~ ., data = data) # FUll model
-round(summary(M1)$coef, 3)
+lm_final = lm(pct_bf ~ density + abdomen , data = data) # final
+round(summary(lm_final)$coef, 3)
 sjPlot::tab_model(lm3, show.ci = FALSE)
 ```
 
 
-## 10 fold cross validaiton
-```{r}
-set.seed(2020)
-nrow(data)
-```
-
-```{r}
-fold_id = c(1, rep(1:10, each = 25))
-
-```
 
