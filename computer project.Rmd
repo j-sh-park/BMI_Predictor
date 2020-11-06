@@ -205,6 +205,14 @@ It seems like there is a strong negative correlation between density and abdomen
 lm_final = lm(pct_bf ~ age + abdomen, data = data) # final
 round(summary(lm_final)$coef, 3)
 sjPlot::tab_model(lm3, show.ci = FALSE)
+
+#lasso linear regression
+
+
+#10 fold cross validation method to select  
+#split the dataset into the training part 80% of the observation and 20% of the observation
+#RMSE and MAE as criterion
+
 ```
 
 
