@@ -35,16 +35,21 @@ There are 250 observations and 16 variables in this data set. Each row represent
 ```{r results='hide'}
 skimr::skim(data)
 ```
+```{r}
+#Delete the density feature as the percentage body fat is calculated based on density. There is a strong correlation between each other
+data = subset(data, select = -1)
+```
 
-## Model selection using forward AIC
+## Variable selection using forward AIC
 
 ```{r}
-M0 = lm(pct_bf ~ 1, data = data) # Null model
-M1 = lm(pct_bf ~ ., data = data) # FUll model
+M0 = lm(Pct.BF ~ 1, data = data) # Null model
+M1 = lm(Pct.BF ~ ., data = data) # FUll model
 step.fwd.aic = step(M0, scope = list(lower = M0, upper = M1), direction = "forward", trace = FALSE) 
 round(summary(step.fwd.aic)$coef,3)
 ```
-## Model selection using backward AIC
+
+## Variable selection using backward AIC
 ```{r}
 step.back.aic = step(M1, direction = "backward", trace = FALSE) 
 round(summary(step.back.aic)$coef,3)
@@ -55,31 +60,31 @@ round(summary(step.back.aic)$coef,3)
 sjPlot::tab_model( step.fwd.aic, step.back.aic, show.ci = FALSE, show.aic = TRUE, dv.labels = c("Forward model", "Backward model") )
 ```
 
-Since both methods give us same AIC, we can choose either of them. We decided to use forward AIC for variable selection
+Since backward AIC gives us smaller AIC, we decided to use backward AIC for variable selection
 
 
 ##Fit a simple linear mode
 
-## pcentage body fat vs density
+## pcentage body fat vs Height 
 ```{r}
-lm1 = lm(pct_bf ~ density, data = data) 
+lm1 = lm(Pct.BF ~ Height , data = data) 
 summary(lm1)
 sjPlot::tab_model(lm1, show.ci = FALSE)
 ```
 
 ```{r}
 par(cex = 2) 
-plot(pct_bf~density, data = data) 
+plot(Pct.BF ~ Height, data = data) 
 abline(lm1, lwd = 3, col = "red")
 ```
 ```{r}
-fitted1 = 477.2 + (-433.9) * data$density
-resid1 = data$pct_bf - fitted
+fitted1 = 477.2 + (-433.9) * data$Height
+resid1 = data$Pct.BF - fitted
 ```
 
 ## percentage body fat vs age
 ```{r}
-lm2 = lm(pct_bf ~ age, data = data) 
+lm2 = lm(Pct.BF ~ age, data = data) 
 summary(lm2)
 sjPlot::tab_model(lm2, show.ci = FALSE)
 ```
@@ -90,19 +95,19 @@ abline(lm2, lwd = 3, col = "red")
 ```
 ```{r}
 fitted2 = 10.35029  +  0.19342 * data$age
-resid2 = data$pct_bf - fitted
+resid2 = data$Pct.BF - fitted
 ```
 
 ## percentage body fat vs abdomen
 ```{r}
-lm3 = lm(pct_bf ~ abdomen, data = data) 
+lm3 = lm(Pct.BF ~ Abdomen, data = data) 
 summary(lm3)
 sjPlot::tab_model(lm3, show.ci = FALSE)
 ```
 
 ```{r}
 par(cex = 2) 
-plot(pct_bf~abdomen, data = data) 
+plot(pct_bf~Abdomen, data = data) 
 abline(lm3, lwd = 3, col = "red")
 ```
 ```{r}
@@ -211,6 +216,7 @@ sjPlot::tab_model(lm3, show.ci = FALSE)
 
 #10 fold cross validation method to select  
 #split the dataset into the training part 80% of the observation and 20% of the observation
+
 #RMSE and MAE as criterion
 
 ```
