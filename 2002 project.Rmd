@@ -312,19 +312,48 @@ p9 = ggplot(data,
      geom_hline(yintercept = 0) 
 
 p10 = ggplot(data, 
-            aes(x = age, y = resid2)) + 
+            aes(x = Age, y = resid2)) + 
      geom_point(size = 1) + theme_classic(base_size = 12) + 
      labs(x = "Age", y = "Residual") + 
      geom_hline(yintercept = 0) 
 
 p11 = ggplot(data, 
-            aes(x = abdomen, y = resid3)) + 
+            aes(x = Abdomen, y = resid3)) + 
      geom_point(size = 1) + theme_classic(base_size = 12) + 
      labs(x = "Abdomen", y = "Residual") + 
      geom_hline(yintercept = 0) 
 
+p12 = ggplot(data, 
+            aes(x =Neck, y = resid4)) + 
+     geom_point(size = 1) + theme_classic(base_size = 12) + 
+     labs(x = "Neck", y = "Residual") + 
+     geom_hline(yintercept = 0) 
 
-grid.arrange(p4, p5, p6 ,nrow =2, ncol = 2)
+p13 = ggplot(data, 
+            aes(x = Hip, y = resid5)) + 
+     geom_point(size = 1) + theme_classic(base_size = 12) + 
+     labs(x = "Hip", y = "Residual") + 
+     geom_hline(yintercept = 0) 
+
+p14 = ggplot(data, 
+            aes(x = Thigh, y = resid6)) + 
+     geom_point(size = 1) + theme_classic(base_size = 12) + 
+     labs(x = "Thigh", y = "Residual") + 
+     geom_hline(yintercept = 0) 
+
+p15 = ggplot(data, 
+            aes(x = Forearm, y = resid7)) + 
+     geom_point(size = 1) + theme_classic(base_size = 12) + 
+     labs(x = "Forearm", y = "Residual") + 
+     geom_hline(yintercept = 0) 
+
+p16 = ggplot(data, 
+            aes(x = Wrist, y = resid8)) + 
+     geom_point(size = 1) + theme_classic(base_size = 12) + 
+     labs(x = "Wrist", y = "Residual") + 
+     geom_hline(yintercept = 0) 
+
+#grid.arrange(p9, p10, p11,p12,p13,p14,p15,p16 ,nrow =4, ncol = 2)
 ```
 The data in all plots seems have equal variance. A few outliers can be ignored. The homoskedasiticy assumption is met.
 
@@ -334,15 +363,16 @@ The data in all plots seems have equal variance. A few outliers can be ignored. 
 autoplot(lm1, which = 1:2)
 autoplot(lm2, which = 1:2)
 autoplot(lm3, which = 1:2)
+autoplot(lm4, which = 1:2)
+autoplot(lm5, which = 1:2)
+autoplot(lm6, which = 1:2)
+autoplot(lm7, which = 1:2)
+autoplot(lm8, which = 1:2)
 ```
-There are some departure in the higher quantiles for the first qq plot.
 
-The age vs percentage body fat plot shows a some curvature. There are some departure in the lower quantiles for the first qq plot. This violates the normal distirbution assumption??
-
-The Abdomen vs percentage body fat plot shows a some curvature. There are some departure in the lower quantiles for the first qq plot.
-
-##Check multicolinearity
 ```{r}
+##Check multicolinearity
+
 #extract the data which is storngly correlated to percentage body fat
 corr = data %>%
   select(pct_bf,density,age,abdomen) #select corr > 0.7 or < -0.7
