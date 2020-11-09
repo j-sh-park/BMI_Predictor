@@ -12,10 +12,7 @@ devtools::install_github("ropenscilabs/gendercodeR")
 library(tidyverse)
 library(janitor)
 library(skimr)
-library(visdat)
 library(gridExtra)
-library(gt)
-library(kableExtra)
 library(GGally)
 library(qtlcharts)
 library(ggfortify) 
@@ -386,9 +383,9 @@ It seems like there is a strong negative correlation between density and abdomen
 
 #final linear regression model
 ```{r}
-lm_final = lm(Pct.BF ~ Height + Abdomen + Wrist, data = data) # final
-round(summary(lm_final)$coef, 3)
-sjPlot::tab_model(lm_final, show.ci = FALSE)
+lm_simple = lm(Pct.BF ~ Height + Abdomen + Wrist, data = data) # 
+round(summary(lm_simple)$coef, 3)
+sjPlot::tab_model(lm_simple, show.ci = FALSE)
 ```
 
 
@@ -404,13 +401,63 @@ sjPlot::tab_model(lm_full, show.ci = FALSE)
 #10 fold cross validation method to select  
 set.seed(2020) 
 nrow(data)
-#split the dataset into the training part 80% of the observation and 20% of the observation
-fold_id = c(1, rep(1:10, each = 25)) 
+fold_id = c(rep(1:10, each = 25))
 data$fold_id = sample(fold_id, replace = FALSE)
 head(data)
-#RMSE and MAE as criterion
-
 ```
 
 
+```{r}
+k = 10 
+simple_mse = full_mse = vector(mode = "numeric", length = k) 
+simple_mae = full_mae = vector(mode = "numeric", length = k)
+```
+
+
+```{r}
+for(i in 1:k) {
+  test_set = data[fold_id == i,] 
+  training_set = data[fold_id != i,]
+  
+  simple_lm = lm(Pct.BF ~ Height + Abdomen + Wrist, data = training_set)
+  simple_pred = predict(simple_lm, test_set) 
+  simple_mse[i] = mean((test_set$Pct.BF - simple_pred)^2) 
+  simple_mae[i] = mean(abs(test_set$Pct.BF - simple_pred)) 
+  full_lm = lm(Pct.BF ~., data = training_set) 
+  full_pred = predict(full_lm, test_set) 
+  full_mse[i] = mean((test_set$Pct.BF - full_pred)^2) 
+  full_mae[i] = mean(abs(test_set$Pct.BF - full_pred)) }
+```
+```{r}
+cv_res = tibble(simple_mse, full_mse, simple_mae, full_mae) 
+cv_res
+```
+
+```{r}
+#Root mean square errors:
+c(sqrt(mean(simple_mse)), 
+  sqrt(mean(full_mse))) %>% round(2)
+```
+
+
+```{r}
+#Mean absolute errors:
+c(mean(simple_mae), 
+  mean(full_mae)) %>% round(2)
+```
+```{r}
+result = matrix(c(sqrt(mean(simple_mse)),sqrt(mean(full_mse)),mean(simple_mae),mean(full_mae)), ncol=2)
+colnames(result)= c('RMSE', 'MAE')
+rownames(result) = c('simple model', 'full model')
+#result.table = as.table(result)
+knitr::kable(result)
+```
+
+
+```{r}
+cv_res %>% gather(key = "metric", value = "error") %>% 
+  separate(col = metric, into = c("model","metric")) %>% 
+  ggplot(aes(x = model, y = error)) + facet_wrap(~metric, scales = "free_y") + 
+  geom_boxplot()
+```
 
