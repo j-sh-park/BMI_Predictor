@@ -373,10 +373,9 @@ autoplot(lm8, which = 1:2)
 ```{r}
 ##Check multicolinearity
  
-
-#extract the data which is storngly correlated to percentage body fat
+#extract the data which is strongly correlated to percentage body fat
 corr = data %>%
-  select(pct_bf,density,age,abdomen) #select corr > 0.7 or < -0.7
+  select(Pct.BF, Height, Abdomen, Wrist) #select corr > 0.7 or < -0.7
 
 #correlation matrix
 GGally::ggpairs(corr) + theme_bw(base_size = 15)
@@ -387,16 +386,28 @@ It seems like there is a strong negative correlation between density and abdomen
 
 #final linear regression model
 ```{r}
-lm_final = lm(pct_bf ~ age + abdomen, data = data) # final
+lm_final = lm(Pct.BF ~ Height + Abdomen + Wrist, data = data) # final
 round(summary(lm_final)$coef, 3)
-sjPlot::tab_model(lm3, show.ci = FALSE)
+sjPlot::tab_model(lm_final, show.ci = FALSE)
+```
 
-#lasso linear regression
+
+```{r}
+#full linear regression
+lm_full = lm(Pct.BF ~ ., data = data) # all variables
+round(summary(lm_full)$coef, 3)
+sjPlot::tab_model(lm_full, show.ci = FALSE)
+```
 
 
+```{r}
 #10 fold cross validation method to select  
+set.seed(2020) 
+nrow(data)
 #split the dataset into the training part 80% of the observation and 20% of the observation
-
+fold_id = c(1, rep(1:10, each = 25)) 
+data$fold_id = sample(fold_id, replace = FALSE)
+head(data)
 #RMSE and MAE as criterion
 
 ```
