@@ -114,7 +114,7 @@ abline(lm3, lwd = 3, col = "red")
 ```
 ```{r}
 fitted3 = -42.73413  + 0.66928 * data$abdomen
-resid3 = data$pct_bf - fitted2
+resid3 = data$Pct.BF - fitted2
 ```
 
 ## pcentage body fat vs Neck
@@ -130,9 +130,10 @@ par(cex = 2)
 plot(Pct.BF~Neck, data = data) 
 abline(lm4, lwd = 3, col = "red")
 ```
+
 ```{r}
 fitted4 = -48.0929  +  1.7690  * data$Neck
-resid4 = data$pct_bf - fitted4
+resid4 = data$Pct.BF - fitted4
 ```
 
 ## pcentage body fat vs Hip
@@ -142,14 +143,16 @@ lm5 = lm(Pct.BF ~ Hip, data = data)
 summary(lm5)
 sjPlot::tab_model(lm5, show.ci = FALSE)
 ```
+
 ```{r}
 par(cex = 2) 
 plot(Pct.BF~Hip, data = data) 
 abline(lm5, lwd = 3, col = "red")
 ```
+
 ```{r}
 fitted5 = -62.1198 +  0.8144  * data$Hip
-resid5 = data$pct_bf - fitted5
+resid5 = data$Pct.BF - fitted5
 ```
 
 ## pcentage body fat vs Thigh
@@ -159,14 +162,16 @@ lm6 = lm(Pct.BF ~ Thigh, data = data)
 summary(lm6)
 sjPlot::tab_model(lm6, show.ci = FALSE)
 ```
+
 ```{r}
 par(cex = 2) 
 plot(Pct.BF~Thigh, data = data) 
 abline(lm6, lwd = 3, col = "red")
 ```
+
 ```{r}
 fitted6 = -62.1198 +  0.8144  * data$Thigh
-resid6 = data$pct_bf - fitted6
+resid6 = data$Pct.BF - fitted6
 ```
 
 ## pcentage body fat vs Forearm
@@ -176,14 +181,16 @@ lm7 = lm(Pct.BF ~ Forearm, data = data)
 summary(lm7)
 sjPlot::tab_model(lm7, show.ci = FALSE)
 ```
+
 ```{r}
 par(cex = 2) 
 plot(Pct.BF~Forearm, data = data) 
 abline(lm7, lwd = 3, col = "red")
 ```
+
 ```{r}
 fitted7 = -23.7060 + 1.4911 * data$Thigh
-resid7 = data$pct_bf - fitted7
+resid7 = data$Pct.BF - fitted7
 ```
 
 
@@ -194,32 +201,44 @@ lm8 = lm(Pct.BF ~ Wrist, data = data)
 summary(lm8)
 sjPlot::tab_model(lm8, show.ci = FALSE)
 ```
+
 ```{r}
 par(cex = 2) 
 plot(Pct.BF~Wrist, data = data) 
 abline(lm8, lwd = 3, col = "red")
 ```
+
 ```{r}
 fitted8 = -37.0207 + 3.0763 * data$Thigh
-resid8 = data$pct_bf - fitted8
+resid8 = data$Pct.BF - fitted8
 ```
 
 
 ## Chekcing assumptions
 
+```{r}
+ggplot(data, 
+              aes(x = Height , y = Pct.BF)) + 
+     geom_point(size = 1) + 
+     theme_classic(base_size = 12) + 
+     labs(x = "height",
+          y = "Percentage body fat") +
+     geom_smooth(method = "lm", se = FALSE) 
+```
+
 ###Check linearity
 ```{r}
 #percentage body fat vs density
 p1 = ggplot(data, 
-              aes(x = density , y = pct_bf)) + 
+              aes(x = Height , y = Pct.BF)) + 
      geom_point(size = 1) + 
      theme_classic(base_size = 12) + 
-     labs(x = "density",
+     labs(x = "height",
           y = "Percentage body fat") +
      geom_smooth(method = "lm", se = FALSE) 
 
 p2 = ggplot(data, 
-              aes(x = age , y = pct_bf)) + 
+              aes(x = Age , y = Pct.BF)) + 
      geom_point(size = 1) + 
      theme_classic(base_size = 12) + 
      labs(x = "Age",
@@ -227,15 +246,55 @@ p2 = ggplot(data,
      geom_smooth(method = "lm", se = FALSE) 
 
 p3 = ggplot(data, 
-              aes(x = abdomen , y = pct_bf)) + 
+              aes(x = Abdomen , y = Pct.BF)) + 
      geom_point(size = 1) + 
      theme_classic(base_size = 12) + 
      labs(x = "Abdomen",
           y = "Percentage body fat") +
      geom_smooth(method = "lm", se = FALSE) 
 
+p4 = ggplot(data, 
+              aes(x = Neck , y = Pct.BF)) + 
+     geom_point(size = 1) + 
+     theme_classic(base_size = 12) + 
+     labs(x = "Neck",
+          y = "Percentage body fat") +
+     geom_smooth(method = "lm", se = FALSE) 
 
-grid.arrange(p1, p2, p3 ,nrow =2, ncol = 2)
+p5 = ggplot(data, 
+              aes(x = Hip , y = Pct.BF)) + 
+     geom_point(size = 1) + 
+     theme_classic(base_size = 12) + 
+     labs(x = "Hip",
+          y = "Percentage body fat") +
+     geom_smooth(method = "lm", se = FALSE) 
+
+p6 = ggplot(data, 
+              aes(x = Thigh, y = pct_bf)) + 
+     geom_point(size = 1) + 
+     theme_classic(base_size = 12) + 
+     labs(x = "Thigh",
+          y = "Percentage body fat") +
+     geom_smooth(method = "lm", se = FALSE) 
+
+p7 = ggplot(data, 
+              aes(x = Forearm, y = Pct.BF)) + 
+     geom_point(size = 1) + 
+     theme_classic(base_size = 12) + 
+     labs(x = "Forearm",
+          y = "Percentage body fat") +
+     geom_smooth(method = "lm", se = FALSE) 
+
+p8 = ggplot(data, 
+              aes(x = Wrist , y = Pct.BF)) + 
+     geom_point(size = 1) + 
+     theme_classic(base_size = 12) + 
+     labs(x = "Wrist",
+          y = "Percentage body fat") +
+     geom_smooth(method = "lm", se = FALSE) 
+
+
+#grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, nrow =4, ncol = 2)
 ```
 
 All three plots shows strong linearity, though the variance of percentage body fat for people age 60 to 80 is a bit smaller than the people age from 20 -60. The linearity assumption is met.
@@ -246,23 +305,24 @@ All the observations are taken from different people, the data are independent o
 ### Check homoskedasiticy
 
 ```{r}
-p4 = ggplot(data, 
-            aes(x = density, y = resid1)) + 
+p9 = ggplot(data, 
+            aes(x = Height, y = resid1)) + 
      geom_point(size = 1) + theme_classic(base_size = 12) + 
-     labs(x = "Density", y = "Residual") + 
+     labs(x = "Height", y = "Residual") + 
      geom_hline(yintercept = 0) 
 
-p5 = ggplot(data, 
+p10 = ggplot(data, 
             aes(x = age, y = resid2)) + 
      geom_point(size = 1) + theme_classic(base_size = 12) + 
      labs(x = "Age", y = "Residual") + 
      geom_hline(yintercept = 0) 
 
-p6 = ggplot(data, 
+p11 = ggplot(data, 
             aes(x = abdomen, y = resid3)) + 
      geom_point(size = 1) + theme_classic(base_size = 12) + 
      labs(x = "Abdomen", y = "Residual") + 
      geom_hline(yintercept = 0) 
+
 
 grid.arrange(p4, p5, p6 ,nrow =2, ncol = 2)
 ```
