@@ -372,6 +372,7 @@ autoplot(lm8, which = 1:2)
 
 ```{r}
 ##Check multicolinearity
+ 
 
 #extract the data which is storngly correlated to percentage body fat
 corr = data %>%
