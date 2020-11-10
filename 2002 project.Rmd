@@ -93,7 +93,7 @@ plot(Pct.BF~Age, data = data)
 abline(lm2, lwd = 3, col = "red")
 ```
 ```{r}
-fitted2 = 10.35029  +  0.19342 * data$age
+fitted2 = 10.35029  +  0.19342 * data$Age
 resid2 = data$Pct.BF - fitted2
 ```
 
@@ -110,8 +110,8 @@ plot(Pct.BF~Abdomen, data = data)
 abline(lm3, lwd = 3, col = "red")
 ```
 ```{r}
-fitted3 = -42.73413  + 0.66928 * data$abdomen
-resid3 = data$Pct.BF - fitted2
+fitted3 = -42.73413  + 0.66928 * data$Abdomen
+resid3 = data$Pct.BF - fitted3
 ```
 
 ## pcentage body fat vs Neck
@@ -267,7 +267,7 @@ p5 = ggplot(data,
      geom_smooth(method = "lm", se = FALSE) 
 
 p6 = ggplot(data, 
-              aes(x = Thigh, y = pct_bf)) + 
+              aes(x = Thigh, y =  Pct.BF)) + 
      geom_point(size = 1) + 
      theme_classic(base_size = 12) + 
      labs(x = "Thigh",
@@ -291,7 +291,7 @@ p8 = ggplot(data,
      geom_smooth(method = "lm", se = FALSE) 
 
 
-#grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, nrow =4, ncol = 2)
+grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, nrow =4, ncol = 2)
 ```
 
 All three plots shows strong linearity, though the variance of percentage body fat for people age 60 to 80 is a bit smaller than the people age from 20 -60. The linearity assumption is met.
@@ -316,9 +316,9 @@ p10 = ggplot(data,
 
 p11 = ggplot(data, 
             aes(x = Abdomen, y = resid3)) + 
-     geom_point(size = 1) + theme_classic(base_size = 12) + 
-     labs(x = "Abdomen", y = "Residual") + 
-     geom_hline(yintercept = 0) 
+      geom_point(size = 1) + theme_classic(base_size = 12) + 
+      labs(x = "Abdomen", y = "Residual") + 
+      geom_hline(yintercept = 0) 
 
 p12 = ggplot(data, 
             aes(x =Neck, y = resid4)) + 
@@ -350,9 +350,10 @@ p16 = ggplot(data,
      labs(x = "Wrist", y = "Residual") + 
      geom_hline(yintercept = 0) 
 
-#grid.arrange(p9, p10, p11,p12,p13,p14,p15,p16 ,nrow =4, ncol = 2)
+grid.arrange(p9, p10, p11,p12,p13,p14,p15,p16 ,nrow =4, ncol = 2)
 ```
 The data in all plots seems have equal variance. A few outliers can be ignored. The homoskedasiticy assumption is met.
+
 
 ### Check normality
 
