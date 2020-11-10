@@ -462,3 +462,15 @@ cv_res %>% gather(key = "metric", value = "error") %>%
   geom_boxplot()
 ```
 
+## t-test for average dataset height and average height of American male
+
+```{r}
+avg_h = 69.1
+x = data$Height
+n = length(x)
+t.test(x, mu = 69.1, alternative = "less")
+t0 = (mean(x) - 69.1)/(sd(x)/sqrt(n))
+pval = pt(t0, n - 1)
+pval
+```
+
