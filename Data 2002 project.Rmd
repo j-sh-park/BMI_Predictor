@@ -65,7 +65,7 @@ grid.arrange(a, b,nrow =1, ncol = 2)
 Assumptions are met
 
 ```{r}
-t.test(data$Height, mu = avg_h, alternative = "two.sided")
+t.test(data$Height, mu = 69.1, alternative = "two.sided")
 ```
 Since P value is close to 0, we have to reject the null hypothesis that the mean height of the people in this data set is same as the 69.1 inches. We doubt the representativeness of this sample to all US male.
 
@@ -556,6 +556,9 @@ for(i in 1:k) {
   cv_output = cv.glmnet(x_train, y_train,
                        alpha = 1, lambda = lambda_seq, 
                        nfolds = 5)
+  # identifying best lamda
+  best_lam = cv_output$lambda.min
+  best_lam
  
   lasso_best = glmnet(x_train, y_train, alpha = 1, lambda = best_lam)
   lasso_pred = predict(lasso_best, s = best_lam, newx = x_test)
