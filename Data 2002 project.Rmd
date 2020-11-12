@@ -500,14 +500,6 @@ sjPlot::tab_model(lm_simple_hip, show.ci = FALSE)
 ```
 Note that the p value for the log_hip is 0.2. However the R^2 is higher if we add the log_hip variable. So we want to do 10 fold cross validation to test which model is the best.
 
-##full linear regression
-```{r}
-
-lm_full = lm(Pct.BF ~ ., data = data) # all variables
-round(summary(lm_full)$coef, 3)
-sjPlot::tab_model(lm_full, show.ci = FALSE)
-```
-
 ##10 fold cross validation method to select 
 ```{r}
 set.seed(2020) 
@@ -519,8 +511,8 @@ head(data)
 
 ```{r}
 k = 10 
-lasso_mse = simple_hip_mse = simple_mse = full_mse = vector(mode = "numeric", length = k) 
-lasso_mae = simple_hip_mae = simple_mae = full_mae = vector(mode = "numeric", length = k)
+lasso_mse = simple_hip_mse = simple_mse = vector(mode = "numeric", length = k) 
+lasso_mae = simple_hip_mae = simple_mae = vector(mode = "numeric", length = k)
 ```
 
 
@@ -538,11 +530,6 @@ for(i in 1:k) {
   simple_hip_pred = predict(simple_hip, test_set)
   simple_hip_mse[i] = mean((test_set$Pct.BF - simple_hip_pred)^2)
   simple_hip_mae[i] = mean(abs(test_set$Pct.BF - simple_hip_pred))
-  
-  full_lm = lm(Pct.BF ~., data = training_set) 
-  full_pred = predict(full_lm, test_set) 
-  full_mse[i] = mean((test_set$Pct.BF - full_pred)^2) 
-  full_mae[i] = mean(abs(test_set$Pct.BF - full_pred)) 
   
   #lasso
   x_train = model.matrix(Pct.BF~. , training_set)[,2:15]
@@ -569,15 +556,15 @@ for(i in 1:k) {
 
 
 ```{r}
-cv_res = tibble(simple_mse, full_mse, simple_mae, full_mae, simple_hip_mse, simple_hip_mae, lasso_mse,lasso_mae) 
+cv_res = tibble(simple_mse,  simple_mae, simple_hip_mse, simple_hip_mae, lasso_mse,lasso_mae) 
 cv_res
 ```
 
 ```{r}
-result = matrix(c(sqrt(mean(simple_mse)),sqrt(mean(simple_hip_mse)),sqrt(mean(full_mse)), sqrt(mean(lasso_mse)), mean(simple_mae), mean(simple_hip_mae),mean(full_mae),mean(lasso_mae)), ncol=2)
+result = matrix(c(sqrt(mean(simple_mse)),sqrt(mean(simple_hip_mse)), sqrt(mean(lasso_mse)), mean(simple_mae), mean(simple_hip_mae),mean(lasso_mae)), ncol=2)
 
 colnames(result)= c('RMSE', 'MAE')
-rownames(result) = c('simple model', 'simple model with log hip', 'full model','lasso')
+rownames(result) = c('simple model', 'simple model with log hip', 'lasso')
 knitr::kable(result,digits=4)
 ```
 Reference:
