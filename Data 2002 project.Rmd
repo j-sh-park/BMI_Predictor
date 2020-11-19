@@ -575,3 +575,10 @@ knitr::kable(result,digits=4)
 ```
 Reference:
 
+U.S. Census Bureau (2019). American Community Survey (Race). Retrieved 19 November 2020, from https://data.census.gov/cedsci/table?q=B02001&g=1600000US4962470&tid=ACSDT1Y2019.B02001
+
+Fryar CD, Gu Q, Ogden CL, Flegal KM. Anthropometric reference data for
+children and adults: United States, 2011–2014. National Center for Health
+Statistics. Vital Health Stat 3(39). 2016.
+
+
