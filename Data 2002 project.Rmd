@@ -554,7 +554,6 @@ for(i in 1:k) {
   lasso_mae[i] = mean(abs(test_set$Pct.BF - lasso_pred))}
 ```
 
-
 ```{r}
 cv_res = tibble(simple_mse,  simple_mae, simple_hip_mse, simple_hip_mae, lasso_mse,lasso_mae) 
 cv_res
@@ -567,5 +566,52 @@ colnames(result)= c('RMSE', 'MAE')
 rownames(result) = c('simple model', 'simple model with log hip', 'lasso')
 knitr::kable(result,digits=4)
 ```
+
+#Results
+Final Model Equation: $BF = −0.427𝐻 +0.781𝐴 −1.691𝑊 +7.821$
+Where,
+    $BF$, is Body Fat Percentage(Siri's equation)
+    $H$, is Height(in)
+    $A$, is Abdominal Circumference(cm)
+    $W$, is Wrist Circumference(cm)
+    
+As you can see from our final equation, we found that Height, abdominal circumference and wrist circumference are all predictors for bodyfat with an intercept 7.821. To put this intercept into perspective, the minimum percent body fat required for males is between 2-5% and the body fat percentage of elite male triathletes ranges from 6 to 12 percent. While the negative relationship between H and BF and the positive relationship between A and BF are not likely a surprise, the relationship between W and BF is negative and the p-value for the predictor is 7.630697e-05. This show that as wrist circumference increases, body fat decreases and that the relationship is highly probable as the p-value is so low. 
+
+```{r}
+par(cex = 2) 
+plot(Pct.BF~Age, data = data) 
+abline(lm2, lwd = 3, col = "red")
+```
+$BF = 0.1934A + 10.3503$
+Where,
+    $BF$, is Percent Body Fat(Siri's equation)
+    $A$, is Age
+One of our research questions is what is the relationship between age and percent body fat, here you can see a simple linear regression of that. The equation shows a positive relation between age and body fat percent. Though age does not pass the equal variance assumption, we can see that the variance decreased with subjects aged 60 and older. We can’t say for certain that old people take care of their health better, but it could be a possibility from looking at this data.
+
+#Discussion and Conclusion
+
+Height
+```{r}
+autoplot(lm1, which = 1:2)
+```
+Abdominal
+```{r}
+autoplot(lm3, which = 1:2)
+```
+Wrist
+```{r}
+autoplot(lm8, which = 1:2)
+```
+
+Looking at each normality graph of the three predictors, we can see that there is a slight departure from the normal line. While this doesn’t violate our normality assumption and we can rely on the central limit theorem as we have more than 30 subjects, it is still a limitation to our data and having more normal data could give our final model better results.
+
+The two-sided t-test that was performed shows that the mean height of our sample was significantly different to the mean height of the population of US males. Therefore, the sample data is not very representative of the average US male.This is a limitation of our data and means we should be cautious when using this model to predict the percent body fat of a US male. More relevant date about US males is required for this model to make the prediction more representative.
+
+Although the data contained 13 independent variables, only 4 of them were passed all assumptions. The most statistically significant model contained three variables: height, wrist circumference and abdominal circumference. While the negative relationship between wrist circumference and percent body fat is questionable, it showed a high statistical significance. Due to data's limitation of the sample age mean significantly differing from the population age mean, the accuracy of the final model is questionable.
+
+
 Reference:
+Cathe Friedrich (2019) Ideal Body Fat Percentage for Triathletes. https://cathe.com/ideal-body-fat-percentage-for-triathletes/#:~:text=Body%20fat%20percentage%20in%20elite,store%20more%20fat%20than%20men.
+
+ACE (2009) What are the guidelines for percentage of body fat loss? American Council on Exercise (ACE). Ask the Expert Blog. December 2, 2009.
 
