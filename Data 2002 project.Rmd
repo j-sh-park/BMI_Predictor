@@ -20,7 +20,15 @@ library(sjPlot)
 library(glmnet)
 options(knitr.table.format = "html")
 ```
+# 4.0 Analysis
 
+During the exploration of data, variables for the initial model were selected using the Akaike Information Criterion after performing both backwards and forwards search methods to generate and compare models. The backwards search model was chosen because it had the lower AIC of 1442.736 compared to the AIC from the forwards search model (1443.187), indicating that the backwards search model is better fit for the data. The variables in this initial model included age, height, neck, abdomen, hip, thigh, forearm and wrist. Assumption tests for the model were then undertaken.
+
+To check for linearity, each variable was plotted against body fat percentage and as seen in Figure 1, all the variables have a linear relationship with body fat percentage, thus satisfying the linearity assumption. It can be assumed that the data is independent of each other as all 252 observations are from different people drawn from a random sample. Furthermore, since the number of observations exceed 30, independence can also be assumed based off the central limit theorem. When checking for homoskedasticity, it was observed that most of the plots had equal variance except for age and thigh, where the variance differs across age groups and thigh circumference. Thus, all the variables save for age and thigh are homoskedastic.
+
+The Q-Q plots in Figure 2 show that the normality assumption is met for height, abdomen and weight. However, the other variables show significant curvatures away from the Q-Q line, suggesting that unsurprisingly, the data is not normally distributed. Since these other variables violate the normality assumption, they should be dropped from the model. Upon closer inspection of the hip variable, the distribution seemed like a standard log distribution, so hip was transformed to log(hip). The transformed variable met all the other assumption checks as seen in Figure 3. 
+
+A correlation matrix (Figure 4) was also produced to check for multicollinearity between the variables. There was a relatively strong positive correlation between loghip and abdomen of 85.9%, so two linear regression models were built; one containing loghip and one that did not. 
 
 # Exploratory Data Analysis(EDA)
 ```{r results ='hide'}
