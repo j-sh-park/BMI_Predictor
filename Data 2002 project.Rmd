@@ -21,6 +21,9 @@ library(glmnet)
 options(knitr.table.format = "html")
 ```
 
+# Data Description
+
+This data was sourced from the Brigham Young University in Utah, USA. The Human Performance Research Centre at BYU wanted to determine estimates of body fat percentage of a sample of males. They derived this by measuring the circumference of various body parts of said males and also conducted hydrostatic underwater weighing, which is a process based on the Archimedes' Principle whereby the displacement of water when the male is submerged into it can be used to work out the percentage of body fat in the subject. Their age, height and weight (on land) was also measured, along with measurements of the circumferences of various parts of the participant's body, ranging from (but not limited to): the neck, chest, hip to the ends of the limbs such as the wrist and ankle. The dataset had a total of 15 variables, and the data of these variables from sampling 252 men who participated in the study. 
 
 # Exploratory Data Analysis(EDA)
 ```{r results ='hide'}
@@ -38,7 +41,7 @@ skimr::skim(data)
 
 Hypothesis: $H0:μ=69.1$ vs $H1: μ≠69.1$    # 69.1 is US average male height according to Centers for Disease Control and Prevention (CDC)
 
-Assumptions: $Xi$ are iid rv and follow $N(μ,σ2)$.
+Assumptions: $Xi$ are iid rv and follow $N(μ,σ^2)$.
 
 ```{r warning=FALSE}
 # boxplot
@@ -68,6 +71,9 @@ Assumptions are met
 t.test(data$Height, mu = 69.1, alternative = "two.sided")
 ```
 Since P value is close to 0, we have to reject the null hypothesis that the mean height of the people in this data set is same as the 69.1 inches. We doubt the representativeness of this sample to all US male.
+
+# Results: One Sample t-test
+The assumption checks prior to running the one sample t-test show that it passes them, and it can also be observed that the data for the height in this sample follows a normal distribution. Upon running the t-test, the p-value found is $4.658 \times 10^{-12}$, which suggests that the null hypothesis of $H0:μ=69.1$ should be rejected. Additionally, due to the statistically significant difference in the means of the sample and the US population, it can be surmised that the dataset is unlikely to be a good representation of the average male population of the United States. While the race of the 252 men in the sample is unknown, the larger sample mean of 70.3 inches is more in line with the average male height of the white American population of 5'10", as found by the CDC. Brigham Young University, a university in Provo, Utah; a city which has a predominantly Caucasian population of 88.47%, suggests that it is reasonable to assume the sample would have had a similarly high percentage of white male Americans participating.
 
 ```{r}
 #Delete the density feature as the percentage body fat is calculated based on density. There is a strong correlation between each other
